@@ -18,7 +18,7 @@
                         MinimumDate="{x:Static sys:DateTime.Today}"
                         HorizontalOptions="Center" />
 
-            <Button Text="Save &amp; Update Widget"
+            <!--<Button Text="Save & Update Widget"
                     Clicked="OnSaveClicked"
                     HorizontalOptions="Center" />
 

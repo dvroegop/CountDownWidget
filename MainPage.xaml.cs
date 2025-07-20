@@ -1,8 +1,6 @@
-﻿using Android;
-using Android.Content;
+﻿using Android.Content;
 using Android.Widget;
 using Android.Appwidget;
-using Resource = Android.Resource;
 
 namespace CountDownWidget;
 
@@ -48,8 +46,8 @@ public partial class MainPage : ContentPage
             text = $"{minutes} minutes left.";
         }
 
-        var rv = new RemoteViews(ctx.PackageName, Android.Resource.Layout.widget_countdown);
-        rv.SetTextViewText(Android.Resource.Id.CountDown, text);
+        var rv = new RemoteViews(ctx.PackageName, Resource.Layout.widget_countdown);
+        rv.SetTextViewText(Resource.Id.tvCountdown, text);
 
         return rv;
     }

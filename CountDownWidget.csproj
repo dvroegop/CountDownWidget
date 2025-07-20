@@ -50,8 +50,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <AndroidResource Remove="Platforms\Android\Resources\layout\widget_countdown.xml" />
-	  <AndroidResource Remove="Platforms\Android\Resources\xml\countdown_widget_info.xml" />
+	  <AndroidResource Include="Platforms\Android\Resources\layout\widget_countdown.xml" />
+	  <AndroidResource Include="Platforms\Android\Resources\xml\countdown_widget_info.xml" />
 	</ItemGroup>
 
 	<ItemGroup>
