@@ -7,7 +7,7 @@ using Java.Lang;
 
 namespace CountDownWidget;
 
-[BroadcastReceiver(Label = "Countdown Widget")]
+[BroadcastReceiver(Label = "Countdown Widget", Exported = true)]
 [IntentFilter(new[] { "android.appwidget.action.APPWIDGET_UPDATE" })]
 [MetaData("android.appwidget.provider", Resource = "@xml/countdown_widget_info")]
 public class CountdownWidgetProvider : AppWidgetProvider
