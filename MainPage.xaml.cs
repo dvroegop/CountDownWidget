@@ -6,18 +6,18 @@ namespace CountDownWidget;
 
 public partial class MainPage : ContentPage
 {
-
 	public MainPage()
 	{
 		InitializeComponent();
         
         this.TargetDatePicker.Date = Preferences.Get("targetDate", DateTime.Today.AddDays(1));
-		
+        this.DescriptionEntry.Text = Preferences.Get("eventDescription", "");
     }
 
     private void OnSaveClicked(object sender, EventArgs e)
     {
         Preferences.Set("targetDate", TargetDatePicker.Date);
+        Preferences.Set("eventDescription", DescriptionEntry.Text);
 
         // Force a Widget update
         var ctx = Android.App.Application.Context;
@@ -33,6 +33,7 @@ public partial class MainPage : ContentPage
     {
         var prefs = Preferences.Default;
         var target = prefs.Get("targetDate", DateTime.Today.AddDays(1));
+        var description = prefs.Get("eventDescription", "");
         var now = DateTime.Now;
 
         var diff = target - now.Date;
@@ -48,6 +49,7 @@ public partial class MainPage : ContentPage
 
         var rv = new RemoteViews(ctx.PackageName, Resource.Layout.widget_countdown);
         rv.SetTextViewText(Resource.Id.tvCountdown, text);
+        rv.SetTextViewText(Resource.Id.tvDescription, description);
 
         return rv;
     }

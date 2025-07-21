@@ -17,15 +17,19 @@ namespace CountDownWidget;
 [MetaData("android.appwidget.provider", Resource = "@xml/countdown_widget_info")]
 public class CountdownWidgetProvider : AppWidgetProvider
 {
-    public override void OnUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
+    public override void OnUpdate(Context? context, AppWidgetManager? appWidgetManager, int[]? appWidgetIds)
     {
-        foreach (var widgetId in appWidgetIds)
-        {
-            var views = MainPage.BuildRemoteViews(context);
-            appWidgetManager.UpdateAppWidget(widgetId, views);
-        }
+        if (context == null)
+            return;
+        
+        if (appWidgetIds != null)
+            foreach (var widgetId in appWidgetIds)
+            {
+                var views = MainPage.BuildRemoteViews(context);
+                appWidgetManager?.UpdateAppWidget(widgetId, views);
+            }
 
-        ScheduleNextUpdate(context);
+        ScheduleNextUpdate(context!);
     }
 
 
@@ -46,10 +50,8 @@ public class CountdownWidgetProvider : AppWidgetProvider
             action == Intent.ActionMyPackageReplaced)
         {
             var mgr = AppWidgetManager.GetInstance(context);
-            if (mgr == null)
-                return;
-            
-            var ids = mgr.GetAppWidgetIds(new ComponentName(context, Class.FromType(typeof(CountdownWidgetProvider))));
+
+            var ids = mgr?.GetAppWidgetIds(new ComponentName(context, Class.FromType(typeof(CountdownWidgetProvider))));
             if (ids == null)
                 return;
             
@@ -57,7 +59,7 @@ public class CountdownWidgetProvider : AppWidgetProvider
             foreach (var widgetId in ids)
             {
                 var views = MainPage.BuildRemoteViews(context);
-                mgr.UpdateAppWidget(widgetId,views);
+                mgr?.UpdateAppWidget(widgetId,views);
             }
 
             // And schedule the next update
@@ -68,8 +70,8 @@ public class CountdownWidgetProvider : AppWidgetProvider
     void ScheduleNextUpdate(Context context)
     {
         // Figure out when to fire: every 30 minutes if >48h left, otherwise every minute
-        var prefs = Preferences.Default;
-        var target = prefs.Get("targetDate", DateTime.Today).Date;
+        var preferences = Preferences.Default;
+        var target = preferences.Get("targetDate", DateTime.Today).Date;
         var now = DateTime.Now;
         var diff = target - now;
 
@@ -81,9 +83,16 @@ public class CountdownWidgetProvider : AppWidgetProvider
 
         var intent = new Intent(context, Class.FromType(typeof(CountdownWidgetProvider)));
         intent.SetAction("android.appwidget.action.APPWIDGET_UPDATE");
-        var pi = PendingIntent.GetBroadcast(context, 0, intent, PendingIntentFlags.UpdateCurrent);
+        var pi = PendingIntent.GetBroadcast(context, 0, intent, PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Immutable);
 
+        if (pi == null)
+            throw new NullPointerException("PendingIntent is null");
+        
         var am = context.GetSystemService(Context.AlarmService) as AlarmManager;
+        
+        if(am == null)
+            throw new NullPointerException("AlarmManager is null");
+        
         var triggerAt = JavaSystem.CurrentTimeMillis() + interval;
         am.Set(AlarmType.Rtc, triggerAt, pi);
     }

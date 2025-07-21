@@ -17,6 +17,15 @@
             <DatePicker x:Name="TargetDatePicker"
                         MinimumDate="{x:Static sys:DateTime.Today}"
                         HorizontalOptions="Center" />
+                        
+            <Label Text="Enter description:" 
+                   FontSize="20" 
+                   HorizontalOptions="Center" />
+                   
+            <Entry x:Name="DescriptionEntry"
+                   Placeholder="Enter event description"
+                   HorizontalOptions="Fill"
+                   MaxLength="50" />
 
             <Button Text="Save &amp; Update Widget"
                     Clicked="OnSaveClicked"
